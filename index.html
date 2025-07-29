@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Xatanical Store</title>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body, html {
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Share Tech Mono', monospace;
+      color: #00ff9f;
+    }
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+    .container {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding-top: 80px;
+    }
+    h1 {
+      font-size: 3em;
+      color: #00ffe1;
+      text-shadow: 0 0 10px #00ffe1;
+      animation: glow 2s infinite alternate;
+    }
+    @keyframes glow {
+      from { text-shadow: 0 0 10px #00ffe1; }
+      to { text-shadow: 0 0 20px #00ffe1, 0 0 30px #00ff9f; }
+    }
+    .btn {
+      background-color: #00ff9f;
+      color: #000;
+      padding: 12px 24px;
+      margin: 10px;
+      font-size: 1em;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: 0.3s;
+      display: inline-block;
+    }
+    .btn:hover {
+      background-color: #00c37a;
+    }
+    .pay-list {
+      background-color: rgba(0, 0, 0, 0.7);
+      padding: 20px;
+      border-radius: 10px;
+      margin: 20px auto;
+      width: 90%;
+      max-width: 500px;
+    }
+    .pay-list h2 {
+      color: #00ffe1;
+    }
+    .pay-list li {
+      margin: 8px 0;
+    }
+    .logo {
+      margin-top: 20px;
+    }
+    .logo img {
+      width: 100px;
+      transition: transform 0.3s;
+    }
+    .logo img:hover {
+      transform: scale(1.1);
+    }
+  </style>
+</head>
+<body>
+
+<!-- MATRIX CANVAS -->
+<canvas id="matrix"></canvas>
+
+<!-- BACKGROUND MUSIC -->
+<audio autoplay loop>
+  <source src="https://your-mp3-url-here.com/music.mp3" type="audio/mpeg">
+</audio>
+
+<div class="container">
+  <div class="logo">
+    <a href="https://t.me/xatanicvxii" target="_blank">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/8/83/Matrix_code.svg" alt="Xatanic">
+    </a>
+  </div>
+
+  <h1>Xatanical Store</h1>
+  <p>Layanan digital terenkripsi dan terpercaya<br>#MatrixSecureMode</p>
+
+  <a class="btn" href="https://t.me/xatanicvxii" target="_blank">💬 Hubungi Telegram</a>
+  <a class="btn" href="https://your-qris-link.com" target="_blank">🧾 QRIS Pembayaran</a>
+
+  <div class="pay-list">
+    <h2>Metode Pembayaran</h2>
+    <ul>
+      <li>📱 Dana: 6288272044089</li>
+      <li>📱 Gopay: 6288272044089</li>
+      <li>📷 QRIS: <a href="https://your-qris-link.com" style="color:#00ff9f" target="_blank">Klik disini</a></li>
+    </ul>
+  </div>
+</div>
+
+<script>
+  const canvas = document.getElementById("matrix");
+  const ctx = canvas.getContext("2d");
+
+  canvas.height = window.innerHeight;
+  canvas.width = window.innerWidth;
+
+  const letters = "アァイイウエオカキクケコサシスセソタチツテトナニヌネノ0123456789XATANICAL";
+  const fontSize = 14;
+  const columns = canvas.width / fontSize;
+  const drops = Array.from({ length: columns }).fill(1);
+
+  function draw() {
+    ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#00ff9f";
+    ctx.font = fontSize + "px monospace";
+
+    for (let i = 0; i < drops.length; i++) {
+      const text = letters.charAt(Math.floor(Math.random() * letters.length));
+      ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+      if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+        drops[i] = 0;
+      }
+      drops[i]++;
+    }
+  }
+
+  setInterval(draw, 33);
+</script>
+
+</body>
+</html>
