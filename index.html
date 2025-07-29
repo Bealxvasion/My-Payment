@@ -38,17 +38,18 @@
     .typing {
       font-size: 1em;
       color: #00ff9f;
-      margin-bottom: 20px;
+      margin: 0 auto 20px;
       white-space: nowrap;
       overflow: hidden;
       border-right: 3px solid #00ff9f;
-      width: 0;
-      animation: typing 5s steps(40, end) forwards, blink .75s step-end infinite;
+      display: inline-block;
+      max-width: 90vw;
+      animation: typing 10s steps(80, end) forwards, blink 0.75s step-end infinite;
     }
 
     @keyframes typing {
-      from { width: 0 }
-      to { width: 100% }
+      from { width: 0; }
+      to { width: 100%; }
     }
 
     @keyframes blink {
