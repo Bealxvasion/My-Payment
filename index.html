@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -7,115 +7,175 @@
   <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body, html {
-      height: 100%;
-      overflow: hidden;
+    body {
       font-family: 'Share Tech Mono', monospace;
+      background: black;
       color: #00ff9f;
+      overflow-x: hidden;
     }
+
     canvas {
       position: fixed;
       top: 0;
       left: 0;
       z-index: -1;
     }
+
     .container {
-      position: relative;
-      z-index: 2;
+      padding: 80px 20px 40px;
       text-align: center;
-      padding-top: 80px;
+      z-index: 2;
+      position: relative;
     }
+
     h1 {
-      font-size: 3em;
+      font-size: 2.5em;
       color: #00ffe1;
-      text-shadow: 0 0 10px #00ffe1;
-      animation: glow 2s infinite alternate;
+      text-shadow: 0 0 15px #00ffe1;
+      margin-bottom: 10px;
     }
-    @keyframes glow {
-      from { text-shadow: 0 0 10px #00ffe1; }
-      to { text-shadow: 0 0 20px #00ffe1, 0 0 30px #00ff9f; }
+
+    .typing {
+      font-size: 1em;
+      color: #00ff9f;
+      margin-bottom: 20px;
+      white-space: nowrap;
+      overflow: hidden;
+      border-right: 3px solid #00ff9f;
+      width: 0;
+      animation: typing 5s steps(40, end) forwards, blink .75s step-end infinite;
     }
+
+    @keyframes typing {
+      from { width: 0 }
+      to { width: 100% }
+    }
+
+    @keyframes blink {
+      from, to { border-color: transparent }
+      50% { border-color: #00ff9f; }
+    }
+
     .btn {
-      background-color: #00ff9f;
-      color: #000;
-      padding: 12px 24px;
+      background-color: transparent;
+      border: 1px solid #00ff9f;
+      color: #00ff9f;
+      padding: 10px 20px;
       margin: 10px;
       font-size: 1em;
-      text-decoration: none;
       border-radius: 8px;
-      transition: 0.3s;
+      text-decoration: none;
       display: inline-block;
+      transition: 0.3s ease;
     }
+
     .btn:hover {
-      background-color: #00c37a;
+      background-color: #00ff9f;
+      color: #000;
     }
+
     .pay-list {
-      background-color: rgba(0, 0, 0, 0.7);
+      background-color: rgba(0, 0, 0, 0.6);
+      border: 1px solid #00ff9f;
       padding: 20px;
       border-radius: 10px;
       margin: 20px auto;
-      width: 90%;
       max-width: 500px;
     }
+
     .pay-list h2 {
-      color: #00ffe1;
+      margin-bottom: 10px;
     }
-    .pay-list li {
+
+    ul li {
+      list-style: none;
       margin: 8px 0;
     }
-    .logo {
-      margin-top: 20px;
-    }
+
     .logo img {
       width: 100px;
-      transition: transform 0.3s;
+      margin-bottom: 10px;
+      transition: transform 0.3s ease;
     }
+
     .logo img:hover {
       transform: scale(1.1);
+    }
+
+    .footer {
+      margin-top: 40px;
+      font-size: 12px;
+      color: #00ffaa88;
+    }
+
+    /* Modal QR */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 9;
+      left: 0; top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.8);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal img {
+      max-width: 300px;
+      border: 3px solid #00ff9f;
+      border-radius: 10px;
     }
   </style>
 </head>
 <body>
 
-<!-- MATRIX CANVAS -->
 <canvas id="matrix"></canvas>
 
-<!-- BACKGROUND MUSIC -->
+<!-- Music (optional) -->
 <audio autoplay loop>
-  <source src="https://your-mp3-url-here.com/music.mp3" type="audio/mpeg">
+  <source src="https://your-link.com/music.mp3" type="audio/mpeg">
 </audio>
 
 <div class="container">
   <div class="logo">
     <a href="https://t.me/xatanicvxii" target="_blank">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/8/83/Matrix_code.svg" alt="Xatanic">
+      <img src="https://files.catbox.moe/0px8yr.png" alt="Xatanical Logo">
     </a>
   </div>
 
   <h1>Xatanical Store</h1>
-  <p>Layanan digital terenkripsi dan terpercaya<br>#MatrixSecureMode</p>
+  <div class="typing" id="typeText">Selamat datang di store digital terpercaya kami. Pembayaran mudah, aman, dan cepat!</div>
 
-  <a class="btn" href="https://t.me/xatanicvxii" target="_blank">💬 Hubungi Telegram</a>
-  <a class="btn" href="https://your-qris-link.com" target="_blank">🧾 QRIS Pembayaran</a>
+  <a class="btn" href="https://t.me/xatanicvxii" target="_blank">Telegram</a>
+  <a class="btn" onclick="showQR()">QRIS</a>
 
   <div class="pay-list">
     <h2>Metode Pembayaran</h2>
     <ul>
       <li>📱 Dana: 6288272044089</li>
       <li>📱 Gopay: 6288272044089</li>
-      <li>📷 QRIS: <a href="https://your-qris-link.com" style="color:#00ff9f" target="_blank">Klik disini</a></li>
+      <li>🧾 QRIS: <a href="#" onclick="showQR()" style="color:#00ff9f;">Tampilkan QR</a></li>
     </ul>
   </div>
+
+  <div class="footer">© 2025 Xatanical</div>
+</div>
+
+<!-- QR Modal -->
+<div class="modal" id="qrModal" onclick="hideQR()">
+  <img src="https://files.catbox.moe/iddhhf.jpeg" alt="QRIS Pembayaran">
 </div>
 
 <script>
+  // MATRIX EFFECT
   const canvas = document.getElementById("matrix");
   const ctx = canvas.getContext("2d");
 
   canvas.height = window.innerHeight;
   canvas.width = window.innerWidth;
 
-  const letters = "アァイイウエオカキクケコサシスセソタチツテトナニヌネノ0123456789XATANICAL";
+  const letters = "アイウエオカキクケコサシスセソ0123456789XATANICAL";
   const fontSize = 14;
   const columns = canvas.width / fontSize;
   const drops = Array.from({ length: columns }).fill(1);
@@ -138,6 +198,15 @@
   }
 
   setInterval(draw, 33);
+
+  // QR Modal
+  function showQR() {
+    document.getElementById('qrModal').style.display = 'flex';
+  }
+
+  function hideQR() {
+    document.getElementById('qrModal').style.display = 'none';
+  }
 </script>
 
 </body>
